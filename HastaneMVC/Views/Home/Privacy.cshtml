@@ -1,0 +1,133 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+<button id="j1" >Jquery   </button>
+<button id="j2"> onemli   </button>
+<button id="j3"> pargrafı gizkle   </button>
+<button id="j4"> pargrafı göster gizlenen   </button>
+<button id="j5"> gizle göster toggle   </button>
+<button id="j6"> css değiştirme   </button>
+<button id="j7"> css değiştirme   </button>
+<button id="j8"> length  </button>
+<button id="j9"> dizi  </button>
+<ul id="ul" > içini js ile dldurucaz</ul>
+
+
+@* /*// *@
+
+<div id="divv">
+    <button id ="k1">   veri al</button>
+
+</div>
+
+
+
+<p>bugun cok guzel</p>
+
+@section Scripts  {
+<script>  // layout da ki etiketlerde buradaki scripts den  etkilenir     mesala layoutda p etiketi varsa kayıp olur 
+
+    $(document).ready(function () {
+    // bütün butunları etkiler baba
+    $("button").click(function ()  {  
+
+        alert("bütün butunları getir ");
+
+    } );
+        // id göre saçme class göre seçmede . ile 
+       $("#j1").click(function (e)  {
+
+        alert("sadece onemli id si j2 olan ");
+            // Yukarıdaki genel "button" kuralının tetiklenmesini engeller!
+        e.stopPropagation();
+
+    } );
+
+    $("p").on({mouseover : function () {
+    
+      $(this).css("color","blue");
+
+    },  //  başka bir şey ek yazacaksak , koy
+
+        mouseleave : function() {
+                
+              $(this).css("color","red");
+        }
+    });
+
+    $("#j3").click(function  ()  {
+
+        $("p").hide();
+    } ) ;
+
+    $("#j4").click(function (){
+
+        $("p").show();
+    } );
+    //toggle buton 
+    $("#j5").click( function ( ) {
+
+        $("p").toggle(1000);  // toggle içi boş bırakılabilir veya  girilen rakamı süre olarak algılayıp milisaniye o sürede yavaş yavaş çalışır
+
+    }  ) ;
+                
+                  $("#j6").css({
+                      "background-color": "yellow",
+                      "color": "black",
+                      "border": "2px solid orange"
+                  });
+
+                  $("#j7").click(function (e) {
+                      $(this).css({
+                          "background-color": "green",
+                          "color": "white",
+                          "font-weight": "bold",
+                          "height":"400px"
+                      });                
+                      // Daha önceki butonlardaki genel alert'i engellemek için
+                      e.stopPropagation();
+                  });
+
+                  $("#j6").click(function () {
+
+                      $("p").append("yeni bilgi eklendi");  // p etiketlerine ekleme yapar  j6 ya tıklayınca
+
+                  } );
+
+                  $("#j8").click(function () {
+
+                      alert($("p").length)  // kaç tane  $( bundan) var  sayfada onu söyler  
+ 
+                  } ) ;
+
+                  var  takimlar =[ "bjk","fb","gs","ts","sw","ww","ff","dsd"];
+
+                      $("#j9").click(function () {
+            $("#ul").empty(); // Listeyi temizle
+
+            // Bildiğimiz klasik for döngüsü
+            for (var i = 0; i < takimlar.length; i++) {
+        
+                var suAnkiTakim = takimlar[i]; // Dizideki i'ninci elemanı al
+        
+                $("#ul").append("<li>" + suAnkiTakim + "</li>");
+            }
+
+            
+        });
+
+        ////////////////////////
+
+        $("#k1").click( function (){
+
+            $("divv").load(" ")  // hangi alt dizinden okuma yapacak dosya yolunun load(  ) içine yazıyoruz  txt olur farklı bir şey olır onda kullanuyoruk
+              // altına if else atarak   function ile aldığımız bilgilerin yüklenip yüklenmemesini söyleriz //load ile  html kodu olan bir txt de çekip web sayfasında güncelleme yeapabilirz 
+
+        }  );
+    });
+</script>
+    }

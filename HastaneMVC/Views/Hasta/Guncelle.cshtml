@@ -1,0 +1,59 @@
+﻿@using HastaneMVC.DTOs
+@model HastaModelDTO
+
+@{
+    ViewData["Title"] = "Hasta Bilgilerini Güncelle";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Hasta Bilgilerini Düzenle</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="guncelle" method="post">
+                        
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-4">
+                            <label asp-for="TcNo" class="form-label fw-bold">TC Kimlik Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-credit-card-2-front"></i></span>
+                                <input asp-for="TcNo" class="form-control" maxlength="11" required />
+                            </div>
+                            <span asp-validation-for="TcNo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="AdSoyad" class="form-label fw-bold">Hasta Adı Soyadı</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <input asp-for="AdSoyad" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                            <button type="submit" class="btn btn-warning px-5 fw-bold text-dark">
+                                <i class="bi bi-save"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

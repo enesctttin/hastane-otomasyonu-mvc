@@ -1,0 +1,61 @@
+﻿<h2> AJAX ile Dosya Okuma </h2>
+<div id="divv">
+    <button id="j">
+        Dosya Oku
+    </button>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#j").click(function (e) {
+                // Her ihtimale karşı sayfanın veya butonun doğal hareketini durduralım
+                e.stopPropagation();
+
+                // İŞTE AJAX SİHRİ BAŞLIYOR
+                $.ajax({
+                    
+                    // 1. TYPE (İşlem Türü) 
+                    // Sunucudan veya bir dosyadan veri "okuyacağımız" için GET kullanıyoruz.
+                    // Eğer veritabanına kayıt yapsaydık POST kullanacaktık.
+                    type: "GET",
+
+                    // 2. URL (Adres) 
+                    // Hangi dosyayı veya C# Controller metodunu okuyacağız?
+                    // Yolu buraya yazılır. (Örn: projenin wwwroot klasöründeki bir txt dosyası)
+                    url: "/ornekMetin.txt",
+
+                    // 3. DATATYPE (Veri Tipi) 
+                    // Okuyacağımız veri ne formatta geliyor? Düz yazı ise "text",
+                    // veritabanından gelen gelişmiş paket ise "json", HTML sayfası ise "html" yazılır.
+                    dataType: "text",
+
+                    // 4. CACHE (Önbellek) 
+                    // Büyük harfle "Cache" yazılmaz, küçük "cache" olmalıdır.
+                    // false dersek: Tarayıcı dosyayı hafızasına kaydetmez, butona her bastığında gidip en taze, en güncel halini okur.
+                    cache: false,
+
+                    // 5. SUCCESS (Başarı Durumu)
+                    // Dosya başarıyla okunursa bu fonksiyon çalışır.
+                    // Dosyanın içindeki yazılar (data) isimli değişkene paketlenip bize gelir.
+                    success: function (data) {
+                        
+                        // .html(data) komutu ile gelen yazıyı div'in içine basıyoruz.
+                        $("#divv").html(data);
+
+                    },
+
+                    // 6. ERROR (Hata Durumu)  
+                    // Eğer dosya bulunamazsa veya sunucu çökerse bu kısım çalışır.
+                    error: function () {
+                        alert("Dosya okunamadı! Yol yanlış olabilir veya dosya silinmiş olabilir.");
+                    }
+
+                }); // AJAX sonu
+                
+            }); // Click sonu
+
+        }); // Ready sonu
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@using HastaneMVC.DTOs
+@using HastaneMVC.ViewModels
+@model IEnumerable<RandevuModelDTO>
+
+
+@{
+
+    ViewData["Title"] = "Kayitli Kisiler";
+
+}
+
+<table> 
+    <thead>
+        <tr>
+            <td>kim </td>
+            <td>ID</td>
+            <td> İsim </td>
+            <td> silinmis mi </td>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var abc in Model)
+        {
+            <tr>
+            <td> Doktor</td>
+            <td>@abc.DoktorId</td>
+            <td>@abc.DoktorAdSoyad</td>
+            <td>@abc.IsDeleted</td>
+        </tr>
+        
+        <tr>
+            <td>Hastalar </td>
+            <td>@abc.HastaId  </td>
+            <td>@abc.HastaAdSoyad</td>
+            <td>@abc.IsDeleted</td>
+
+            </tr>
+        }
+
+
+
+    </tbody>
+
+
+
+
+</table>

@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using HastaneMVC.DTOs
+@model BransModelDTO
+
+@{
+    ViewData["Title"] = "Branş Sil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-danger text-white py-3 text-center">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> DİKKAT: Kayıt Silme</h5>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <p class="lead">Aşağıdaki branş kaydını silmek istediğinize emin misiniz?</p>
+                    
+                    <div class="alert alert-secondary my-4">
+                        <h4 class="mb-0 text-dark">@Model.BransAdi</h4>
+                    </div>
+
+                    <p class="text-danger small mb-4">
+                        <i class="bi bi-info-circle"></i> Bu işlem geri alınamaz ve bu branşa bağlı doktorlar varsa sorun oluşabilir.
+                    </p>
+
+                    <form asp-action="Sil" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                Hayır, Vazgeç
+                            </a>
+                            <button type="submit" class="btn btn-danger px-5 fw-bold">
+                                <i class="bi bi-trash"></i> Evet, Kalıcı Olarak Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

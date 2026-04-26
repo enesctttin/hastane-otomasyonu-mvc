@@ -1,0 +1,191 @@
+﻿@using HastaneMVC.ViewModels
+@* BEYİN BAĞLANTISI: Bu sayfanın kargo kutusu (Modeli) RandevuEkleVM'dir.
+  C#'tan gelen veriler bu kalıba göre okunur, geri giderken bu kalıpla gider. 
+*@
+@model RandevuEkleVM
+
+@{
+    ViewData["Title"] = "Yeni Randevu Oluştur";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-calendar-plus-fill"></i> Yeni Randevu Kayıt Formu</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Ekle" method="post">
+                        
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevu.HastaId" class="form-label fw-bold">Randevu Alacak Hasta</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <select asp-for="YeniRandevu.HastaId" class="form-select form-select-lg"
+                                        asp-items="@(new SelectList(Model.HastaListesi, "Id", "AdSoyad"))" required>
+                                    <option value="">-- Lütfen Hasta Seçiniz --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="YeniRandevu.HastaId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Branş</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-diagram-3"></i></span>
+                                <select id="bransSelect" class="form-select form-select-lg"
+                                        asp-items="@(new SelectList(Model.BransListesi, "Id", "BransAdi"))" required>
+                                    <option value="">-- Önce Branş Seçiniz --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevu.DoktorId" class="form-label fw-bold">Gidilecek Doktor</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-file-medical"></i></span>
+                                <select id="doktorSelect" asp-for="YeniRandevu.DoktorId" class="form-select form-select-lg" required disabled>
+                                    <option value="">-- Lütfen Önce Branş Seçiniz --</option>
+                                </select>
+                            </div>
+                            <div class="form-text text-muted"><i class="bi bi-info-circle"></i> Doktor listesi seçilen branşa göre otomatik yüklenecektir.</div>
+                            <span asp-validation-for="YeniRandevu.DoktorId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevu.TarihSaat" class="form-label fw-bold">Randevu Tarihi ve Saati</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-clock"></i></span>
+                                <input asp-for="YeniRandevu.TarihSaat" type="datetime-local" class="form-control form-control-lg" required />
+                            </div>
+                            <span asp-validation-for="YeniRandevu.TarihSaat" class="text-danger"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left"></i> Listeye Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary px-5 fw-bold">
+                                <i class="bi bi-calendar-check"></i> Randevuyu Onayla
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+     
+        $(document).ready(function () {
+            
+            $('#bransSelect').change(BransDegisti);
+            
+        });
+
+
+  
+        function BransDegisti() {
+            var secilenBransId = $('#bransSelect').val();
+
+            if (secilenBransId != "") {
+                AjaxIleDoktorlariGetir(secilenBransId);
+            }
+            else {
+                DoktorKutusunuKilitle();
+            }
+        }
+
+
+        function AjaxIleDoktorlariGetir(bransId) {
+            $.ajax({
+                url: '/Randevu/DoktorlariGetir',
+                type: 'GET',
+                data: { bransId: bransId },
+                
+                success: DoktorKutusunuDoldur,
+                
+                error: SunucuHatasi
+            });
+        }
+
+        function DoktorKutusunuDoldur(gelenVeri) {
+            var doktorSelect = $('#doktorSelect');
+            
+            doktorSelect.empty();
+            doktorSelect.append('<option value="">-- Lütfen Doktor Seçiniz --</option>');
+            
+            for (var i = 0; i < gelenVeri.length; i++) {
+                var doktor = gelenVeri[i];
+                doktorSelect.append('<option value="' + doktor.id + '">' + doktor.adSoyad + '</option>');
+            }
+            
+            doktorSelect.prop('disabled', false);
+        }
+
+
+
+        function DoktorKutusunuKilitle() {
+            var doktorSelect = $('#doktorSelect');
+            doktorSelect.empty();
+            doktorSelect.append('<option value="">-- Lütfen Önce Branş Seçiniz --</option>');
+            
+            doktorSelect.prop('disabled', true);
+        }
+
+        function SunucuHatasi() {
+            alert("Doktor listesi çekilirken sunucu ile iletişim koptu. Lütfen sayfayı yenileyin.");
+        }
+
+    </script>
+}
+
+@* 
+$(document).ready(function () {
+            
+$('#bransSelect').change(function () {
+var secilenBransId = $('#bransSelect').val();
+var doktorSelect = $('#doktorSelect');
+
+if (secilenBransId) {
+$.ajax({
+url: '/Randevu/DoktorlariGetir',
+type: 'GET',
+data: { bransId: secilenBransId },
+success: function (data) {
+doktorSelect.empty();
+doktorSelect.append('
+<option value="">-- Lütfen Doktor Seçiniz --</option>');
+                            
+for (var i = 0; i < data.length; i++) {
+                var doktor = data[i];
+                doktorSelect.append('
+<option value="' + doktor.id + '">' + doktor.adSoyad + '</option>');
+}
+                            
+// Doktor listesi dolunca select'i aktif et
+doktorSelect.prop('disabled', false);
+},
+error: function () {
+alert("Doktor listesi çekilirken sunucu ile iletişim koptu.");
+}
+});
+} else {
+// Branş seçilmediyse doktor select'ini temizle ve kilitle
+doktorSelect.empty();
+doktorSelect.append('
+<option value="">-- Lütfen Önce Branş Seçiniz --</option>');
+doktorSelect.prop('disabled', true);
+}
+});
+});
+ *@

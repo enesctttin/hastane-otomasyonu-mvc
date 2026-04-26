@@ -1,0 +1,60 @@
+﻿@using HastaneMVC.DTOs
+@model HastaModelDTO
+
+@{
+    ViewData["Title"] = "Yeni Hasta Kaydı";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-person-plus-fill"></i> Yeni Hasta Kayıt Formu</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Ekle" method="post">
+                        
+                        <div class="mb-4">
+                            <label asp-for="TcNo" class="form-label fw-bold">TC Kimlik Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-credit-card-2-front"></i></span>
+                                <input asp-for="TcNo" class="form-control form-control-lg"
+                                       placeholder="11 Haneli TC Kimlik No" maxlength="11" required />
+                            </div>
+                            <span asp-validation-for="TcNo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="AdSoyad" class="form-label fw-bold">Hasta Adı Soyadı</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <input asp-for="AdSoyad" class="form-control form-control-lg"
+                                       placeholder="Örn: Ahmet Yılmaz" required />
+                            </div>
+                            <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left"></i> Listeye Dön
+                            </a>
+                            <button type="submit" class="btn btn-success px-5 fw-bold">
+                                <i class="bi bi-save"></i> Hastayı Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,58 @@
+﻿@using HastaneMVC.ViewModels
+@model DoktorEkleVM
+
+@{
+    ViewData["Title"] = "Doktor Düzenle";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Doktor Bilgilerini Düzenle</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Guncelle" method="post">
+                        
+                        <input type="hidden" asp-for="YeniDoktor.Id" />
+
+                        <div class="mb-4">
+                            <label asp-for="YeniDoktor.AdSoyad" class="form-label fw-bold">Doktor Adı Soyadı</label>
+                            <input asp-for="YeniDoktor.AdSoyad" class="form-control form-control-lg" required />
+                            <span asp-validation-for="YeniDoktor.AdSoyad" class="text-danger"></span> 
+
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniDoktor.BransId" class="form-label fw-bold">Uzmanlık Alanı (Branş)</label>
+                            <select asp-for="YeniDoktor.BransId" class="form-select form-select-lg"
+                                    asp-items="@(new SelectList(Model.BransListesi, "Id", "BransAdi"))">
+                            </select>
+                            <span asp-validation-for="YeniDoktor.BransId" class="text-danger"></span> 
+
+                        </div>
+
+                        <hr />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                            <button type="submit" class="btn btn-warning px-5 fw-bold text-dark">
+                                <i class="bi bi-save"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

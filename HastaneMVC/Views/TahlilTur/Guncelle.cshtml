@@ -1,0 +1,52 @@
+﻿@using HastaneMVC.DTOs
+@model TahlilTurModelDTO
+
+@{
+    ViewData["Title"] = "Tahlil Türü Güncelle";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Tahlil Türü Adını Düzenle</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Guncelle" method="post">
+                        
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-4">
+                            <label asp-for="Ad" class="form-label fw-bold">Tahlil Adı</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-droplet-half text-danger"></i></span>
+                                <input asp-for="Ad" class="form-control form-control-lg" required />
+                            </div>
+                            <span asp-validation-for="Ad" class="text-danger"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                            <button type="submit" class="btn btn-warning px-5 fw-bold text-dark">
+                                <i class="bi bi-save"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

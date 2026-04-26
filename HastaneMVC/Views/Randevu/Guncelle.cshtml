@@ -1,0 +1,94 @@
+﻿@using HastaneMVC.ViewModels
+@model RandevuEkleVM
+
+@{
+    ViewData["Title"] = "Randevu Güncelle ";
+}
+<h2>Randevu Bilgilerini Düzenle</h2>.
+
+@* FORM BAŞLANGICI:      asp-action="Guncelle": Aşağıdaki submit butonuna basıldığında içerdeki her şeyi    
+ontroller'daki [HttpPost] Guncelle metoduna fırlat demektir.     *@<form asp-action="Guncelle" method="post">
+        
+@* ASIL KİMLİK: Hangi randevuyu güncellediğimizi C#'ın bilmesi lazım.       
+ğer bu gizli ID'yi koymazsak, C# yeni bir randevu eklemeye çalışır veya çöker.         *@
+<input type="hidden" asp-for="YeniRandevu.Id" />
+        
+@* JAVASCRIPT İPUCUSU: Sayfa açıldığında adamın mevcut doktoru hangi branşta?     
+u C# biliyor (@Model...BransId ile okudu) ama JavaScript bilmiyor.     
+JavaScript sayfayı yüklerken gelip bu gizli inputun içinden o branş ID'sini çalacak.         *@
+<input type="hidden" id="gizliBransId" value="@Model.YeniRandevu.BransId" />
+
+
+<div>
+    <label>Hasta:</label><br>
+            
+    @* 1. GİZLİ KİMLİK: C#'a HastaId'yi yollamaya devam ediyoruz *@
+    <input type="hidden" asp-for="YeniRandevu.HastaId" />
+
+    @* 2. GÖRSELLİK: Select yerine direkt listesinden hastanın adını bulup ekrana düz metin/kilitli kutu olarak basıyoruz *@
+    @{
+        var mevcutHasta = Model.HastaListesi.FirstOrDefault(h => h.Id == Model.YeniRandevu.HastaId);
+    }
+    
+    <input type="text" value="@mevcutHasta?.AdSoyad" disabled />
+    
+    @* (İstersen input yerine direkt <strong>@mevcutHasta?.AdSoyad</strong> şeklinde kalın bir yazıyla da gösterebilirsin) *@
+</div>
+<br>
+
+<div>
+    <label for="bransSelect">Branş:</label><br>
+            
+    @* Sadece id="bransSelect" var. JavaScript bu id'yi kanca olarak kullanıp,              adam buradan bir şey seçtiğinde gidip doktorları getirecek.             *@
+    <select id="bransSelect" asp-items="@(new SelectList(Model.BransListesi, "Id", "BransAdi"))" required>
+        <option value="">-- Branş Seçiniz --</option>
+    </select>
+</div>
+<br>
+
+<div>
+    <label asp-for="YeniRandevu.DoktorId">Doktor:</label><br>
+            
+    @* disabled: Sayfa ilk açıldığında kilitlidir.          
+  Adam üstten branş seçtiğinde, JavaScript bu kilidi açıp          
+  içini C#'tan (AJAX ile) çektiği doktorlarla dolduracak.             *@
+    <select asp-for="YeniRandevu.DoktorId" id="doktorSelect" asp-items="@(new SelectList(Model.DoktorListesi, "Id", "AdSoyad"))" required>
+        <option value="">-- Doktor Seçiniz --</option>
+    </select>
+</div>
+<br>
+
+<div>
+    <label asp-for="YeniRandevu.TarihSaat">Randevu Tarihi ve Saati:</label><br>
+            
+    @* type="datetime-local": Tarayıcının kendi otomatik takvim/saat ekranını açtırır. *@
+    <input asp-for="YeniRandevu.TarihSaat" type="datetime-local" required />
+    <span asp-validation-for="YeniRandevu.TarihSaat" class="text-danger"></span> <!-- ekle -->
+
+</div>
+<br>
+
+<div>
+    <label asp-for="YeniRandevu.DoktorNotu">Triyaj Notu:</label><br>
+            
+    @* textarea: Uzun metinler içindir. rows="4" ekranda 4 satırlık yer kapla demektir. *@
+    <textarea asp-for="YeniRandevu.DoktorNotu" rows="4" cols="30" placeholder="Triyaj notu giriniz..."></textarea>
+</div>
+<br>
+
+<div>
+    @* asp-action="Index": Tıklanınca formu yollamaz, sadece Index sayfasına geri kaçar *@
+    <a asp-action="Index">İptal Et</a>
+            
+    @* type="submit": Formun içindeki her şeyi paketleyip en üstteki form asp-action hedefine ateşler! *@
+    <button type="submit">Değişiklikleri Kaydet</button>
+</div>
+</form>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

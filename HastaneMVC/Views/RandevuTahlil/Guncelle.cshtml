@@ -1,0 +1,67 @@
+﻿@using HastaneMVC.ViewModels
+@model RandevuTahlilEkleVM
+
+@{
+    ViewData["Title"] = "Tahlil Sonucu Gir / Düzenle";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Tahlil Detaylarını ve Sonucunu Güncelle</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Guncelle" method="post">
+                        
+                        <input type="hidden" asp-for="YeniRandevuTahlil.Id" />
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.RandevuId" class="form-label fw-bold">Randevu Bilgisi</label>
+                            <select asp-for="YeniRandevuTahlil.RandevuId" class="form-select"
+                                    asp-items="@(new SelectList(Model.RandevuListesi, "Id", "HastaAdSoyad"))" required>
+                            </select>
+                            <span asp-validation-for="YeniRandevuTahlil.RandevuId" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.TahlilTuruId" class="form-label fw-bold">İstenen Tahlil</label>
+                            <select asp-for="YeniRandevuTahlil.TahlilTuruId" class="form-select"
+                                    asp-items="@(new SelectList(Model.TahlilTurListesi, "Id", "Ad"))" required>
+                            </select>
+                            <span asp-validation-for="YeniRandevuTahlil.TahlilTuruId" class="text-danger"></span> 
+
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.Sonuc" class="form-label fw-bold text-success">
+                                <i class="bi bi-clipboard-check"></i> Tahlil Sonucu / Rapor
+                            </label>
+                            <textarea asp-for="YeniRandevuTahlil.Sonuc" class="form-control border-success" rows="5"
+                                      placeholder="Laboratuvar sonuçlarını veya doktor değerlendirmesini buraya giriniz..."></textarea>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                            <button type="submit" class="btn btn-warning px-5 fw-bold text-dark">
+                                <i class="bi bi-save"></i> Sonucu Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,72 @@
+﻿@using HastaneMVC.ViewModels
+@model RandevuTahlilEkleVM
+
+@{
+    ViewData["Title"] = "Yeni Tahlil İsteği Oluştur";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-file-earmark-medical-fill"></i> Yeni Tahlil Atama Formu</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Ekle" method="post">
+                        
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.RandevuId" class="form-label fw-bold text-primary">
+                                <i class="bi bi-calendar2-check"></i> Hangi Randevu İçin Tahlil İsteniyor?
+                            </label>
+                            <select asp-for="YeniRandevuTahlil.RandevuId" class="form-select form-select-lg"
+                                    asp-items="@(new SelectList(Model.RandevuListesi, "Id", "HastaAdSoyad"))" required>
+                                <option value="">-- Lütfen Bir Randevu Seçiniz --</option>
+                            </select>
+                            <div class="form-text text-muted">Açılır listede hastanın adı, doktoru ve randevu tarihi görünmektedir.</div>
+                            <span asp-validation-for="YeniRandevuTahlil.RandevuId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.TahlilTuruId" class="form-label fw-bold text-danger">
+                                <i class="bi bi-droplet-half"></i> İstenecek Tahlil Türü
+                            </label>
+                            <select asp-for="YeniRandevuTahlil.TahlilTuruId" class="form-select form-select-lg"
+                                    asp-items="@(new SelectList(Model.TahlilTurListesi, "Id", "Ad"))" required>
+                                <option value="">-- Lütfen Tahlil Türü Seçiniz (Örn: Kan, MR) --</option>
+                            </select>
+                            <span asp-validation-for="YeniRandevuTahlil.TahlilTuruId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniRandevuTahlil.Sonuc" class="form-label fw-bold">Tahlil Sonucu / Laborant Notu</label>
+                            <textarea asp-for="YeniRandevuTahlil.Sonuc" class="form-control" rows="3"
+                                      placeholder="Bu alanı şimdilik boş bırakabilirsiniz. Sonuç çıkınca güncellenecektir..."></textarea>
+                            <div class="form-text text-muted">Boş bırakırsanız sistem otomatik olarak "Bekleniyor" yazacaktır.</div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left"></i> Listeye Dön
+                            </a>
+                            <button type="submit" class="btn btn-success px-5 fw-bold">
+                                <i class="bi bi-save"></i> Tahlil İsteğini Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

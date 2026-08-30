@@ -12,7 +12,6 @@ namespace HastaneMVC.ViewModels
         public RandevuTahlilModel YeniRandevuTahlil { get; set; }
 
 
-
         // Açılır listede gösterilecek liste olarak at
         [ValidateNever]
         public IEnumerable<RandevuModelDTO> RandevuListesi { get; set; }

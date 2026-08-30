@@ -1,7 +1,5 @@
 ﻿@using HastaneMVC.ViewModels
-@* BEYİN BAĞLANTISI: Bu sayfanın kargo kutusu (Modeli) RandevuEkleVM'dir.
-  C#'tan gelen veriler bu kalıba göre okunur, geri giderken bu kalıpla gider. 
-*@
+
 @model RandevuEkleVM
 
 @{
@@ -57,7 +55,7 @@
                             <label asp-for="YeniRandevu.TarihSaat" class="form-label fw-bold">Randevu Tarihi ve Saati</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-clock"></i></span>
-                                <input asp-for="YeniRandevu.TarihSaat" type="datetime-local" class="form-control form-control-lg" required />
+                                <input asp-for="YeniRandevu.TarihSaat" type="datetime-local" date-min="@DateTime.Now" value="@DateTime.Now" class="form-control form-control-lg" required />
                             </div>
                             <span asp-validation-for="YeniRandevu.TarihSaat" class="text-danger"></span>
                         </div>
@@ -148,6 +146,20 @@
 
     </script>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @* 
 $(document).ready(function () {

@@ -9,7 +9,7 @@ namespace HastaneMVC.Models
     {
         
         [StringLength(150)]
-        [Required(ErrorMessage = "Zorunlu alan")]
+        [Required]
         public string AdSoyad { get; set; }
 
         public int BransId { get; set; }

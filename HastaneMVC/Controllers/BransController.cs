@@ -2,7 +2,10 @@
 using HastaneMVC.Data;   
 using HastaneMVC.DTOs; 
 using System.Linq;
-using HastaneMVC.Models;       
+using HastaneMVC.Models;
+using Mono.TextTemplating;
+using Microsoft.EntityFrameworkCore;
+using LamarCodeGeneration.Util;
 
 namespace HastaneMVC.Controllers
 {
@@ -19,15 +22,42 @@ namespace HastaneMVC.Controllers
             _context = context;
         }
 
+        
+
+
+
+
 
         public IActionResult Index()
         {
+
+            // State denemesi burada, bir metodun içinde
+            var u = new DoktorModel(); // DTO değil, entity
+            Console.WriteLine(_context.Entry(u).State); // Detached
+            // u nesnesi güncellenirse   console modified yazılır 
+
+            var tutucu = new DoktorModel{
+               AdSoyad="dfs"
+            }
+            ;
+
+            u = tutucu;
+
+            Console.WriteLine(_context.Entry(u).State);  // modified 
+
+            // savechange atıp              Console.WriteLine(_context.Entry(u).State);  unchanged oldu 
+
+
+
+
             var bransListesiDTO = _context.Branslar.Where(i=>i.IsDeleted==false).Select(b=> new BransModelDTO
             {
                 Id= b.Id,
                 BransAdi=b.BransAdi
 
             }).ToList();// Veritabanından hepsini çek
+
+         //   var eee=_context.Branslar.ToList();
 
             return View(bransListesiDTO);  // Ekrana (View'a) gönder
         }
@@ -37,6 +67,9 @@ namespace HastaneMVC.Controllers
         [HttpGet]
         public IActionResult Ekle()
         {
+            
+
+
             return View();   // Sadece boş formu ekranda gösterir
         }  
 
@@ -45,13 +78,38 @@ namespace HastaneMVC.Controllers
         public IActionResult Ekle(BransModelDTO modelDTO)
         {
 
+            /*
 
             if (ModelState.IsValid)
             {
-                var entity = new BransModel { BransAdi = modelDTO.BransAdi };
+
+                //alınan hatayı console yazdırma ya da değişkene atma
+                // FirstOrDefault(x=> x.ValidationState==Mircrosoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) eklenebilir
+                ViewBag.HataMesaj = ModelState.Values.FirstOrDefault().Errors[0].ErrorMessage;
+
+                // cshtmlde input girilen yerlere span içinde asp-validation for eklenmeli hata mesajı eklemek için  
+                return View(new BransModelDTO { });
+            var messages = ModelState.Tolist();
+
+            }*/
+            // model de verdiğin required de masxlenght veya stringlenght de   html taşınır o 
+            // ModelState hataları görmeye ve validasyonu kontrol temeye yarar  
+
+            // cshrtmlde asp-validaton-summary="All"  ile bütün hatalar tek yerde toplanır 0
+
+
+
+
+
+            if (ModelState.IsValid)
+            {
+                var entity = new BransModel { BransAdi = modelDTO.BransAdi.ToUpper() };
 
                 _context.Branslar.Add(entity);   // Veritabanına yeni branşı ekle
                 _context.SaveChanges();         // Değişiklikleri kaydet
+
+                TempData["success"] = "işlem başarılı";
+
 
                 return RedirectToAction("Index");  // İşlem bitince liste (Index) sayfasına geri dön
 
@@ -87,12 +145,13 @@ namespace HastaneMVC.Controllers
 
                 var eskiBrans = _context.Branslar.Find(guncelBrans.Id);
 
-                eskiBrans.BransAdi = guncelBrans.BransAdi;
+                eskiBrans.BransAdi = guncelBrans.BransAdi.ToUpper();
 
 
 
                 _context.Branslar.Update(eskiBrans); // Üzerinde değişiklik yapılmış halini veritabanında güncelle
                 _context.SaveChanges(); // Değişiklikleri kaydet
+                TempData["success"] = "işlem başarılı";
 
                 return RedirectToAction("Index"); // Liste sayfasına geri dön
             }
@@ -132,7 +191,10 @@ namespace HastaneMVC.Controllers
                 brans.DeleteTime = DateTime.Now;
                 brans.IsDeleted= true;
                 //_context.Branslar.Remove(brans); // Veritabanından sil 
-                _context.SaveChanges(); 
+
+                _context.SaveChanges();
+                TempData["success"] = "işlem başarılı";
+
             }
 
             return RedirectToAction("Index"); 

@@ -1,25 +1,38 @@
 ﻿using HastaneMVC.Data;
 using HastaneMVC.DTOs;
+using HastaneMVC.DTOs;
+using HastaneMVC.Models;
+using HastaneMVC.Services;
+using HastaneMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using HastaneMVC.ViewModels;
-using HastaneMVC.DTOs;
-using HastaneMVC.Models;
 
 namespace HastaneMVC.Controllers
 {
-    public class DoktorController : Controller
+    public class DoktorController : BaseController
     {
-        private readonly HastaneContext _context;
 
+
+        private readonly DoktorService _doktorservice ;
+
+        public DoktorController(HastaneContext context, DoktorService doktorservice) : base(context)
+        {
+            _doktorservice = doktorservice;
+        }
+
+
+        // private readonly HastaneContext _context;
+        /*
         public DoktorController(HastaneContext context)
         {
             _context = context;
-        }
+        }*/
+
         public IActionResult Index( string ara)
         {
-            List<DoktorModel> doktorlistesi;
+            /*
+            ICollection<DoktorModel> doktorlistesi;
 
             if (ara != null)
             {
@@ -43,48 +56,48 @@ namespace HastaneMVC.Controllers
                 }).ToList();
             }
             return View(doktorlistesi);
+            */
+        //hata vermesin diye    var doktorlistesi=new DoktorModel();
+
+            return View(_doktorservice.indexgetir(ara));
         }
 
         [HttpGet]
         public IActionResult Ekle()
         {
-           
-
-
-
-
+          
+            /*
             var model = new DoktorEkleVM
             {
                 BransListesi = branslarigetir(),
                 YeniDoktor = new DoktorModelDTO() // Ekrana boş bir doktor form alanı gönde
             };
-
             return View(model);
+            */
+
+            return View(_doktorservice.EkleGet());
+
+
+
         }
         [HttpPost]
         public IActionResult Ekle(DoktorEkleVM gelenKutu)
         {
 
-
+            // hataları console'a yazdırmak için:
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
             {
                 Console.WriteLine(error.ErrorMessage);
             }
-
-
-
-            if (!ModelState.IsValid)
-            {
-                gelenKutu.BransListesi = branslarigetir();
-                return View(gelenKutu);
-            }
-
+                  
+/*
             var entity = new DoktorModel
             {
                 AdSoyad = gelenKutu.YeniDoktor.AdSoyad,
                 BransId = gelenKutu.YeniDoktor.BransId
             };
-
+*/
+           var entity= _doktorservice.EklePost(gelenKutu);
             _context.Doktorlar.Add(entity);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -95,11 +108,9 @@ namespace HastaneMVC.Controllers
         [HttpGet]
         public IActionResult Guncelle(int id)
         {
+            /*
             var guncellemeDoktor = _context.Doktorlar.Find(id); 
-            if (guncellemeDoktor == null)
-            {
-                return NotFound();
-            }
+         
             var model = new DoktorEkleVM
             {
                 YeniDoktor = new DoktorModelDTO
@@ -111,21 +122,22 @@ namespace HastaneMVC.Controllers
                 BransListesi = branslarigetir()
             };
 
-            return View(model);
+            return View(model);*/
+
+
+            return View(_doktorservice.GuncelleGet(id));
         }
         [HttpPost]
         public IActionResult Guncelle(DoktorEkleVM model) 
         {
-            if (!ModelState.IsValid)
-            {
-                model.BransListesi = branslarigetir();
-                return View(model);
-            }
-
+         
+            /*
             var eskiDoktor = _context.Doktorlar.Find(model.YeniDoktor.Id);
             eskiDoktor.AdSoyad = model.YeniDoktor.AdSoyad;
             eskiDoktor.BransId = model.YeniDoktor.BransId;
-            _context.SaveChanges();
+            _context.SaveChanges();  
+            */
+            _doktorservice.GuncellePost(model);
             return RedirectToAction("Index");
         }
         
@@ -161,6 +173,8 @@ namespace HastaneMVC.Controllers
         // sadece bu Controller'ın içindeki diğer kodlar kullanabilir.
 
           
+        // base serviceden artık halledicez
+        /*
         private  IEnumerable<BransModelDTO> branslarigetir()
         {
             return _context.Branslar.Where(b => b.IsDeleted == false).Select(c => new BransModelDTO
@@ -174,6 +188,9 @@ namespace HastaneMVC.Controllers
 
             
         }
+        */
+
+
 
     }
 }

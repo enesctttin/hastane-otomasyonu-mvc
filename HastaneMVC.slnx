@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="CustomRouteHandler/CustomRouteHandler.csproj" Id="c624a5c8-977e-4ec8-a553-ff8cd17c8a01" />
+  <Project Path="dependency_injection/dependency_injection.csproj" Id="948fcdbe-c509-487e-bd91-4d0fd2022bf6" />
+  <Project Path="environment/environment.csproj" Id="f24bcf22-f34d-493c-8e95-d9dbe8e6e182" />
   <Project Path="HastaneMVC/HastaneMVC.csproj" />
+  <Project Path="MiddlewareExample.Web/MiddlewareExample.Web.csproj" Id="0bc95204-9821-4211-ae73-a4dbabaad9af" />
 </Solution>

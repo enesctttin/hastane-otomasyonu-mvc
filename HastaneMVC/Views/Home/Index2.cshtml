@@ -1,0 +1,47 @@
+﻿
+@{
+    Layout = null;
+}
+
+helpers 
+
+urlHelper oluşturmak ve o anki url e dair bize bilgi vermek için kullanılır.
+verilen actioan a  ait url oluşturmak için kullanılır. url.action("index","prodoct",new{id=5})
+bu url  index/product/5 şeklinde oluşur.
+program cs de oluşturduğun yapıya uygun olmalı  map controller route pattern dir bu
+url.helpers da aynı yapı sadece  farklı    localhost7070/index/product/5
+şeklinde oluşur
+
+Url.ActionContext o anki url e dair bilgi verir. request . response yaparak kullancı bilgisi alınabilir context bilgilerine edinmemizi sağlar
+
+html.partial farklı bir divi sayfaya eklemek için kullanılır. html.partial("partialviewname") şeklinde kullanılır. partial view sayfaları _ ile başlar.  _partialviewname.cshtml şeklinde olmalıdır.
+
+<div> @Html.Partial("index1") </div>
+
+<div>@Url.ActionContext.HttpContext.Request.Path.Value</div>
+
+
+<cache>
+
+    Cache: @DateTime.Now
+ 
+</cache>
+<br />
+@DateTime.Now
+
+<div>tarayıcılar static dosyaları cache de tutar gönderilenler request eden client ın cihazında tutulur bu işlem cache  ile yapılır  cache üzerinde saklar </div>
+
+
+<form  asp-controller="Home" asp-action="createProduct" method="post">
+    <input type="text" name="BransAdi"  />
+    <br />
+    <input type="number" name="Id" />
+
+
+    <button> ekle</button>
+</form>
+
+
+<a asp-action="Index" asp-controller="Home" asp-route-a="ahmet" asp-route-b="mehmet" asp-route-id="123" asp-route-x="egfrhgb">tıkla manipule et</a>
+
+default route pattern nin  pattern: "{controller=Home}/{action=Index}/{a}/{b}/{id?}");  seklinde olmalı yukarıdaki için  x rotada yok query string olarak alınır  ?x=egfrhgb

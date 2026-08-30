@@ -7,11 +7,11 @@ namespace HastaneMVC.Models
     public class HastaModel :BaseEntity
     {
      
-        [Required(ErrorMessage = "Zorunlu alan")]
+        [Required]
         [StringLength(11)]
         public string TcNo { get; set; } = null!;
 
-        [Required(ErrorMessage = "Zorunlu alan")]
+        [Required]
         [StringLength(150)]
         public string AdSoyad { get; set; }
 

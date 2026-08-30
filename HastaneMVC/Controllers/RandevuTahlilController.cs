@@ -65,8 +65,7 @@ namespace HastaneMVC.Controllers
 
 
 
-            if (ModelState.IsValid)
-            {
+      
 
                 // nullable öncesi
                 if (string.IsNullOrEmpty(model.YeniRandevuTahlil.Sonuc))
@@ -81,9 +80,7 @@ namespace HastaneMVC.Controllers
                 return RedirectToAction("Index");
 
 
-            }
-
-            return View(model);
+        
         }
 
         [HttpGet]
@@ -115,8 +112,6 @@ namespace HastaneMVC.Controllers
         {
 
 
-            if (ModelState.IsValid)
-            {
                 var eskiKayit = _context.RandevuTahlilleri.Find(model.YeniRandevuTahlil.Id);
 
                 eskiKayit.RandevuId = model.YeniRandevuTahlil.RandevuId;
@@ -125,8 +120,7 @@ namespace HastaneMVC.Controllers
 
                 _context.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            return View(model);
+      
 
 
 
@@ -150,7 +144,6 @@ namespace HastaneMVC.Controllers
             return View(dto); 
         }
 
-        // 7. SİLME (POST)
         [HttpPost, ActionName("Sil")]
         public IActionResult SilOnay(int id)
         {

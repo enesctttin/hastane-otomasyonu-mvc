@@ -61,12 +61,10 @@ namespace HastaneMVC.Controllers
         [HttpPost]
         public IActionResult Ekle(TahlilTurModelDTO modelDTO)
         {
-            
-            if (ModelState.IsValid)
-            {
+       
                 var entity = new TahlilTurModel
                 {
-                    Ad = modelDTO.Ad,
+                    Ad = modelDTO.Ad.ToUpper(),
                     Id = modelDTO.Id,
                 };
 
@@ -77,10 +75,7 @@ namespace HastaneMVC.Controllers
 
                 return RedirectToAction("Index");
 
-            }
-
-            return View(modelDTO);
-
+          
         }
 
        
@@ -88,7 +83,14 @@ namespace HastaneMVC.Controllers
         [HttpGet]
         public IActionResult Guncelle(int id)
         {
-            var tahliltur = _context.TahlilTurleri.Find(id);
+            //var tahliltur = _context.TahlilTurleri.Find(id);
+
+            // alternatif 
+
+            var tahliltur = _context.TahlilTurleri
+      .FirstOrDefault(u => u.Id == id);
+
+
             var dto = new TahlilTurModelDTO
             {
                 Id = tahliltur.Id,
@@ -103,22 +105,12 @@ namespace HastaneMVC.Controllers
         {
 
 
-
-
-
-            if (ModelState.IsValid)
-            {
                 var eskitahlil = _context.TahlilTurleri.Find(modelDTO.Id);
-                eskitahlil.Ad = modelDTO.Ad;
+                eskitahlil.Ad = modelDTO.Ad.ToUpper();
 
                 _context.SaveChanges();
                 return RedirectToAction("Index");
 
-
-            }
-
-
-            return View(modelDTO);
 
         }
 

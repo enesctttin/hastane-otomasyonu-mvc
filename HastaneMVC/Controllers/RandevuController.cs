@@ -11,32 +11,29 @@ namespace HastaneMVC.Controllers
 {
     public class RandevuController : BaseController
     {
+        /*
         public RandevuController(HastaneContext context, RandevuService randevuService) : base(context, randevuService)
         {
         }
+        */
 
+        private readonly RandevuService _randevuService;
+
+        public RandevuController(HastaneContext context, RandevuService randevuService) : base(context)
+        {
+            _randevuService = randevuService;
+        }
 
         public IActionResult Index()
         {
-            var randevuListesi = _context.Randevular.Where(i=>i.IsDeleted==false)
-                .Select(r=> new RandevuModelDTO
-                {
-                    Id=r.Id,
-                    TarihSaat=r.TarihSaat,
-
-                    HastaAdSoyad=r.Hasta.AdSoyad,
-                    DoktorAdSoyad=r.Doktor.AdSoyad,
-                    BransAdi=r.Doktor.Brans.BransAdi,
-
-                }).ToList();
-         
+            var randevuListesi = _randevuService.indexinrandevugetir();
 
             return View(randevuListesi);
         }
 
         [HttpGet]
         public IActionResult Ekle()
-        {
+        {/*
             var viewModel = new RandevuEkleVM
             {
                 YeniRandevu = new RandevuModelDTO(),
@@ -48,26 +45,21 @@ namespace HastaneMVC.Controllers
                 BransListesi =branslarigetir()
             };
 
+            return View(viewModel);   */
+
+            var viewModel = _randevuService.EkleGetir();
+
             return View(viewModel);
+
+
         }
 
         [HttpPost]
         public IActionResult Ekle(RandevuEkleVM model)
-        {
-
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        {   /*
+            if (string.IsNullOrEmpty(model.YeniRandevu.DoktorNotu))
             {
-                Console.WriteLine("HATA: " + error.ErrorMessage);
-            }
-
-
-
-            if (!ModelState.IsValid)
-            {
-                model.DoktorListesi = doktorgetir();
-                model.HastaListesi = hastalarigetir();
-                model.BransListesi = branslarigetir();
-                return View(model);
+                model.YeniRandevu.DoktorNotu = "Henüz not girilmedi.";
             }
 
             var entity = new RandevuModel
@@ -75,10 +67,10 @@ namespace HastaneMVC.Controllers
                 HastaId = model.YeniRandevu.HastaId,
                 DoktorId = model.YeniRandevu.DoktorId,
                 TarihSaat = model.YeniRandevu.TarihSaat,
-                DoktorNotu = string.IsNullOrEmpty(model.YeniRandevu.DoktorNotu)
-                             ? "Henüz not girilmedi."
-                             : model.YeniRandevu.DoktorNotu
-            };
+                DoktorNotu = model.YeniRandevu.DoktorNotu
+            };*/ 
+
+                var entity = _randevuService.EkleEkle(model);
 
             _context.Randevular.Add(entity);
             _context.SaveChanges();
@@ -89,7 +81,7 @@ namespace HastaneMVC.Controllers
         public IActionResult Guncelle(int id)
         {
             //var randevu = _context.Randevular.Find(id);
-
+/*
             var randevu = _context.Randevular
          .Where(i => i.Id == id)
          .Select(r => new RandevuModelDTO
@@ -112,19 +104,22 @@ namespace HastaneMVC.Controllers
             };
 
             return View(viewModel);
+*/
+            var viewModel = new RandevuEkleVM
+            {
+                YeniRandevu = _randevuService.guncellenecekOlanGetir(id),
+                DoktorListesi = doktorgetir(),
+                HastaListesi = hastalarigetir(),
+                BransListesi = branslarigetir(),
+            };
+            return View(viewModel);
+
         }
 
         [HttpPost]
         public IActionResult Guncelle(RandevuEkleVM model)
         {
-            if (!ModelState.IsValid)
-            {
-                model.DoktorListesi = doktorgetir();
-                model.HastaListesi = hastalarigetir();
-                model.BransListesi = branslarigetir();
-                return View(model);
-            }
-
+         /*
             var eskiRandevu = _context.Randevular.Find(model.YeniRandevu.Id);
 
             eskiRandevu.TarihSaat = model.YeniRandevu.TarihSaat;
@@ -132,7 +127,10 @@ namespace HastaneMVC.Controllers
             eskiRandevu.DoktorId = model.YeniRandevu.DoktorId;
             eskiRandevu.DoktorNotu = model.YeniRandevu.DoktorNotu;
 
-            _context.SaveChanges();
+            _context.SaveChanges();   */ 
+
+
+            _randevuService.GuncellePost(model);
             return RedirectToAction("Index");
 
 
@@ -151,7 +149,7 @@ namespace HastaneMVC.Controllers
 
         [HttpPost, ActionName("Sil")]
         public IActionResult SilOnay(int id)
-        {
+        {/*
             var randevu = _context.Randevular.Find(id);
             if (randevu != null)
             {
@@ -159,7 +157,9 @@ namespace HastaneMVC.Controllers
                 randevu.IsDeleted= true;
               //  _context.Randevular.Remove(randevu);
                 _context.SaveChanges();
-            }
+            }  */
+
+            _randevuService.SilPost(id);
 
             return RedirectToAction("Index");
         }
@@ -179,6 +179,9 @@ namespace HastaneMVC.Controllers
 
             return Json(doktorlar);
         }
+
+
+        /*  bunlar base service e taşındı  randevu service e değil  çünkü bütün controllerlarda kullanılıyor  randevu controllerda da kullanılıyor ama diğer controllerlarda da kullanılıyor bu yüzden base service e taşıdık  randevu service e değil
 
         private IEnumerable<BransModelDTO> branslarigetir()
         {
@@ -211,6 +214,6 @@ namespace HastaneMVC.Controllers
                
             }).ToList();
         }
-
+        */
     }
 }

@@ -7,7 +7,7 @@ namespace HastaneMVC.Models
     public class TahlilTurModel :BaseEntity
     {
      
-        [Required(ErrorMessage = "Zorunlu alan")]
+        [Required]
         [StringLength(150)]
         public string Ad { get; set; }
 

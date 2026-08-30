@@ -7,7 +7,7 @@ namespace HastaneMVC.DTOs
 
         public int Id { get; set; }
 
-
+        [Required(ErrorMessage = "Branş adı zorunludur.")]
         public string BransAdi { get; set; }
     }
 }

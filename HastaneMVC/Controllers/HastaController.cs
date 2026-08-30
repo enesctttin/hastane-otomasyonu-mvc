@@ -36,13 +36,12 @@ namespace HastaneMVC.Controllers
         {
        
 
-            if (ModelState.IsValid)
-            {
+            
 
 
                 var entity = new HastaModel
                 {
-                    AdSoyad = yeniHasta.AdSoyad,
+                    AdSoyad = yeniHasta.AdSoyad.ToUpper(),
                     TcNo = yeniHasta.TcNo,
 
 
@@ -51,15 +50,14 @@ namespace HastaneMVC.Controllers
 
                 _context.Hastalar.Add(entity);
                 _context.SaveChanges();
+            TempData["success"] = "işlem başarılı";
 
 
 
-                return RedirectToAction("Index");
 
-            }
+            return RedirectToAction("Index");
 
-            return View(yeniHasta);
-
+          
         }
        
         //
@@ -82,22 +80,20 @@ namespace HastaneMVC.Controllers
         {
 
 
-            if (ModelState.IsValid)
-            {
                 var eskiHasta = _context.Hastalar.Find(guncelhasta.Id);
 
                 eskiHasta.TcNo = guncelhasta.TcNo;
-                eskiHasta.AdSoyad = guncelhasta.AdSoyad;
+                eskiHasta.AdSoyad = guncelhasta.AdSoyad.ToUpper();
                 eskiHasta.Id = guncelhasta.Id;
 
                 _context.Hastalar.Update(eskiHasta);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+            TempData["success"] = "işlem başarılı";
+
+            return RedirectToAction("Index");
 
 
-            }
-
-            return View(guncelhasta);
+           
         }
         //
         [HttpGet]
@@ -129,6 +125,8 @@ namespace HastaneMVC.Controllers
                 hasta.IsDeleted = true;
              //   _context.Hastalar.Remove(hasta);
                 _context.SaveChanges();
+                TempData["success"] = "işlem başarılı";
+
             }
             return RedirectToAction("Index");
         }

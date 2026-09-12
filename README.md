@@ -98,7 +98,6 @@ LocalDB'yi işaret ediyor.
 - Silinen kayıtların listelendiği ve geri alınabildiği yönetim ekranı
 - Servis katmanının tüm controller'lara yaygınlaştırılması
 
-Geliştirme sürecinde tutulan notlar [NOTES.md](NOTES.md) dosyasında.
 
 ---
 
